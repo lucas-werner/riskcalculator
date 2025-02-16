@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Data Breach Severity Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input,
+      select {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Data Breach Severity Calculator</h1>
+    <form id="breachForm">
+      <div class="section">
+        <h2>Data Processing Context (DPC)</h2>
+        <label for="dpc">Select the data category:</label>
+        <select id="dpc" name="dpc">
+          <option value="1">Simple (1)</option>
+          <option value="2">Behavioral (2)</option>
+          <option value="3">Financial (3)</option>
+          <option value="4">Sensitive (4)</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <h2>Ease of Identification (EI)</h2>
+        <label>Select the level of ease of identification:</label>
+        <input type="radio" id="ei1" name="ei" value="0.25" />
+        <label for="ei1">Negligible (0.25)</label>
+        <br />
+        <input type="radio" id="ei2" name="ei" value="0.5" />
+        <label for="ei2">Limited (0.5)</label>
+        <br />
+        <input type="radio" id="ei3" name="ei" value="0.75" />
+        <label for="ei3">Significant (0.75)</label>
+        <br />
+        <input type="radio" id="ei4" name="ei" value="1" />
+        <label for="ei4">Maximum (1)</label>
+      </div>
+
+      <div class="section">
+        <h2>Circumstances of the Breach (CB)</h2>
+        <label for="confidentiality">Loss of Confidentiality:</label>
+        <select id="confidentiality" name="confidentiality">
+          <option value="0">None (0)</option>
+          <option value="0.25">Data sent to known recipients (0.25)</option>
+          <option value="0.5">Data sent to unknown recipients (0.5)</option>
+        </select>
+        <br />
+        <label for="integrity">Loss of Integrity:</label>
+        <select id="integrity" name="integrity">
+          <option value="0">No loss (0)</option>
+          <option value="0.25">Data altered but recoverable (0.25)</option>
+          <option value="0.5">Data altered irrecoverably (0.5)</option>
+        </select>
+        <br />
+        <label for="availability">Loss of Availability:</label>
+        <select id="availability" name="availability">
+          <option value="0">Data recoverable (0)</option>
+          <option value="0.25">Temporary unavailability (0.25)</option>
+          <option value="0.5">Full unavailability (0.5)</option>
+        </select>
+        <br />
+        <label for="malicious">Malicious Intent:</label>
+        <select id="malicious" name="malicious">
+          <option value="0">No (0)</option>
+          <option value="0.5">Yes (0.5)</option>
+        </select>
+      </div>
+
+      <input type="button" value="Calculate Severity" onclick="calculateSeverity()" />
+    </form>
+
+    <div id="result" class="section"></div>
+
+    <script>
+      function calculateSeverity() {
+        // Get DPC score
+        var dpc = parseFloat(document.getElementById("dpc").value);
+
+        // Get EI score from radio buttons
+        var eiElements = document.getElementsByName("ei");
+        var ei = 0;
+        for (var i = 0; i < eiElements.length; i++) {
+          if (eiElements[i].checked) {
+            ei = parseFloat(eiElements[i].value);
+            break;
+          }
+        }
+        if (ei === 0) {
+          alert("Select a level for Ease of Identification.");
+          return;
+        }
+
+        // Get CB scores
+        var confidentiality = parseFloat(document.getElementById("confidentiality").value);
+        var integrity = parseFloat(document.getElementById("integrity").value);
+        var availability = parseFloat(document.getElementById("availability").value);
+        var malicious = parseFloat(document.getElementById("malicious").value);
+        var cb = confidentiality + integrity + availability + malicious;
+
+        // Calculate severity using the formula: (DPC * EI) + CB
+        var severity = (dpc * ei) + cb;
+
+        // Determine severity level based on the score
+        var level = "";
+        if (severity < 2) {
+          level = "Low";
+        } else if (severity < 3) {
+          level = "Medium";
+        } else if (severity < 4) {
+          level = "High";
+        } else {
+          level = "Very High";
+        }
+
+        // Display results
+        document.getElementById("result").innerHTML =
+          "<h2>Result</h2>" +
+          "<p>Severity Score: " + severity.toFixed(2) + "</p>" +
+          "<p>Severity Level: " + level + "</p>";
+      }
+    </script>
+  </body>
+</html>
