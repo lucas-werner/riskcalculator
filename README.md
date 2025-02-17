@@ -21,7 +21,7 @@ The app is styled with a professional green theme and includes "Know More" secti
 ## Live Demo
 
 Access the live application here:  
-[Data Breach Severity Calculator](https://lucas-werner.github.io/databreach)
+[Data Breach Severity Calculator](https://lucas-werner.github.io/riskcalculator)
 
 ## Installation
 
